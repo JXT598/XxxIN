@@ -3,20 +3,16 @@ package com.example.demo.methods;
 import com.example.demo.common.CommonConst;
 import com.example.demo.common.NumberConst;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class dateMethods {
     /**
      * utc时间格式转换
-     * @param utcDate
-     * @param formatStr
-     * @return
-     * @throws Exception
      */
     public static String utcDateFormat(String utcDate, String formatStr) throws Exception {
         if (StringUtils.isBlank(utcDate)) {
@@ -30,13 +26,48 @@ public class dateMethods {
     }
 
     /**
+     * 本地时间格式转utc格式
+     */
+    public static String formatUTC(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat utcSdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+        Calendar cal = Calendar.getInstance();
+        // 取得时间偏移量：
+        int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
+        // 取得夏令时差：
+        int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
+        try {
+            Date dateValue = sdf.parse(date);
+            long longDate = dateValue.getTime();
+            longDate = longDate - zoneOffset - dstOffset;
+            Date UTCDate = new Date(longDate);
+            return utcSdf.format(UTCDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * utc格式转本地时间格式
+     */
+    public static String parseUTC(String utcDate) {
+        SimpleDateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        utcDate = utcDate.replace("Z", " UTC"); //注意UTC前有空格
+        try {
+            Date date = utcFormat.parse(utcDate);
+            return sdf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
      * 时间转换公共方法
-     * @param vo
-     * @param str
-     * @param start
-     * @param end
-     * @param <T>
-     * @throws Exception
      */
     public static <T> void date(T vo, String str, String start, String end) throws Exception {
         BeanWrapperImpl wrapper = new BeanWrapperImpl(vo);

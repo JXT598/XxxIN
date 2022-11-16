@@ -10,5 +10,11 @@ public class test {
         dateMethods.date(letterVO, "dateStr", "dateStart", "dateEnd");
         System.out.println(letterVO.getDateStart());
         System.out.println(letterVO.getDateEnd());
+
+        String dateTest = "2018-09-28T16:00:00.000Z";
+        String dateTest1 = dateMethods.parseUTC(dateTest);
+        String dateTest2 = dateMethods.formatUTC(dateTest1);
+        System.out.println(dateTest1);
+        System.out.println(dateTest2);
     }
 }
