@@ -2,14 +2,14 @@ package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.List;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @SpringBootApplication
-public class Demo1Application {
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Demo1Application.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 }
+
